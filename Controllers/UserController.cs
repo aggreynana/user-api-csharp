@@ -41,6 +41,47 @@ public class UserController : ControllerBase
         return Ok(users);
     }
 
+
+    [HttpPut("{id:guid}")]
+    public ActionResult<UserResponseDTO> UpdateUser( [FromRoute]Guid id, [FromBody]UserRequestDTO request)
+    {
+        try
+        {
+            var user = _service.UpdateUser(id, request);
+            return Ok(user);
+        }
+        catch (KeyNotFoundException e)
+        {
+            return NotFound(new { message = e.Message });
+        }
+        catch (Exception e)
+        {
+            return BadRequest(new { message = e.Message });
+        }
+    }
+
+
+    [HttpPatch("{id:guid}")]
+    public ActionResult<UserResponseDTO> PatchUser([FromRoute] Guid id, [FromBody] UserPatchDTO request)
+    {
+        try
+        {
+            var user = _service.Patch(id, request);
+            return Ok(user);
+        }
+
+        catch (KeyNotFoundException e)
+        {
+            return NotFound(new { message = e.Message });
+        }
+
+        catch (Exception e)
+        {
+            return BadRequest(new { message = e.Message });
+        }
+    }
+
+
     [HttpDelete]
     public ActionResult<UserResponseDTO> DeleteUser(Guid id)
     {

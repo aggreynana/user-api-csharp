@@ -23,7 +23,7 @@ public class User
         Email = email;
     }
 
-    
+
 
     public void Update(string name, int age, string email)
     {
@@ -39,5 +39,34 @@ public class User
         Name = name;
         Age = age;
         Email = email;
+    }
+    
+
+    public void Patch(string? name, int? age, string? email)
+    {
+        if (name is not null)
+        {
+            if (string.IsNullOrWhiteSpace(name))
+                throw new ArgumentNullException("this can't be empty[PATCH]", nameof(name));
+            Name = name;
+        }
+
+        if (age.HasValue)
+        {
+            if (age < 12)
+                throw new Exception("this age is out of range[PATCH]");
+            Age = age.Value;
+        }
+
+        
+
+
+        if (email is not null)
+        {
+            if (string.IsNullOrWhiteSpace(email))
+                throw new ArgumentNullException("this email field can't be empty[PATCH]", nameof(email));
+
+            Email = email;
+        }
     }
 }

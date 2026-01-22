@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Mvc;
 using UserApi.Application.DTO;
 using UserApi.Domain;
 using UserApi.Repository;
@@ -24,6 +26,7 @@ public class UserService : IUserService
     {
         var user = _repo.GetById(id)
         ?? throw new KeyNotFoundException("the user is not found");
+        // if (user is null) return KeyNotFoundException(new {message = "User is not found"});
 
         return MapToDTO(user);
     }
@@ -33,9 +36,28 @@ public class UserService : IUserService
         return _repo.GetAll().Select(MapToDTO);
     }
 
+    public UserResponseDTO UpdateUser(Guid id, UserRequestDTO request)
+    {
+        var user = _repo.GetById(id)
+        ?? throw new KeyNotFoundException("this user cannot be found");
+
+        user.Update(request.Name, request.Age, request.Email);
+        return MapToDTO(user);
+    }
+
+
+    public UserResponseDTO Patch(Guid id, UserPatchDTO request)
+    {
+        var user = _repo.GetById(id)
+        ?? throw new KeyNotFoundException("this user is not found");
+
+        user.Patch(request.Name, request.Age, request.Email);
+        return MapToDTO(user);
+    }
+
     public void DeleteUser(Guid id)
     {
-        _= _repo.GetById(id)
+        _ = _repo.GetById(id)
         ?? throw new KeyNotFoundException("the user is not found");
 
         _repo.Delete(id);
