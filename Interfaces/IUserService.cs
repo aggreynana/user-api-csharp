@@ -1,5 +1,4 @@
 using UserApi.Application.DTO;
-using UserApi.Domain;
 
 namespace UserApi.Application.Services;
 public interface IUserService
